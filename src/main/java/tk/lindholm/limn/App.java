@@ -13,6 +13,13 @@ import java.io.IOException;
  */
 public class App extends Application {
 
+	/**
+	 * See {@link Main}.
+	 */
+    public static void main_launch(String[] args) {
+    	launch(args);
+    }
+
     private static Scene scene;
 
     @Override
@@ -29,10 +36,6 @@ public class App extends Application {
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
-    }
-
-    public static void main_(String[] args) {
-        launch();
     }
 
 }
