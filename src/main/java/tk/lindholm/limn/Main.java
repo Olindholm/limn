@@ -16,9 +16,9 @@ import static tk.lindholm.limn.App.main_launch;
  * 
  */
 public class Main {
-	
+
 	public static void main(String[] args) {
 		main_launch(args);
 	}
-	
+
 }
