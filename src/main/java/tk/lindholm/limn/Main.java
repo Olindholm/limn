@@ -1,6 +1,6 @@
 package tk.lindholm.limn;
 
-import static tk.lindholm.limn.App.main_launch;
+import static tk.lindholm.limn.Limn.main_launch;
 
 /**
  * 
