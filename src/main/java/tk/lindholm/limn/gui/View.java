@@ -18,7 +18,6 @@ import javafx.stage.*;
  * </ul>
  * 
  * @author Wiggy boy
- *
  */
 public class View extends Stage {
 

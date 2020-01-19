@@ -2,8 +2,9 @@ package tk.lindholm.limn;
 
 import static tk.lindholm.limn.Limn.main_launch;
 
+
+
 /**
- * 
  * Normally the {@link App} class would have the {@link #main} method.
  * 
  * However due to this bug/exception
@@ -14,6 +15,7 @@ import static tk.lindholm.limn.Limn.main_launch;
  * we are forced to make a Main class that does not include
  * {@link javafx.application.Application}. Thus this class.
  * 
+ * @author Wiggy boy
  */
 public class Main {
 

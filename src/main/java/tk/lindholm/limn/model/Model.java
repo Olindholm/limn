@@ -11,7 +11,6 @@ import javax.xml.bind.*;
  * basic of features of a Model in the MVC framework.
  * 
  * @author Wiggy boy
- *
  */
 public abstract class Model {
 
@@ -20,9 +19,8 @@ public abstract class Model {
 	/**
 	 * Loads a model from it's stored XML state.
 	 * 
-	 * @param	file the file where the model is stored.
-	 * @param	cls the specific Model class that the XML represent.
-	 * @return
+	 * @param file	the file where the model is stored.
+	 * @param cls	the specific Model class that the XML represent.
 	 * 
 	 * @return	returns if successful, the specific Model class, <b>cls</b>,
 	 * 			loaded from the stored XML file, <b>file</b>.
@@ -31,7 +29,7 @@ public abstract class Model {
 	 * 							no read privileges of file, corrupt XML or the stored
 	 * 							XML not corresponding to the specific Model, <b>cls</b>.
 	 * 
-	 * @see		#store
+	 * @see #store
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends Model> T load(File file, Class<T> cls) throws JAXBException {
@@ -64,14 +62,14 @@ public abstract class Model {
 	/**
 	 * Stores this model into a XML file.
 	 * 
-	 * @param	file the file where the model is stored.
+	 * @param file	the file where the model is stored.
 	 * 
-	 * @throws	JAXBException	if any unexpected problem occurs during the marshalling.
-	 * @throws	IOException		if the file exists but is a directory rather than a regular file,
+	 * @throws JAXBException	if any unexpected problem occurs during the marshalling.
+	 * @throws IOException		if the file exists but is a directory rather than a regular file,
 	 * 							does not exist but cannot be created (e.g. insufficient privileges),
 	 * 							or cannot be opened for any other reason.
 	 * 
-	 * @see		#load
+	 * @see #load
 	 */
 	public void store(File file) throws JAXBException, IOException {
 

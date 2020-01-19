@@ -7,6 +7,14 @@ import java.io.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 
+
+
+/**
+ * Further improvements on the general {@link Controller} class,
+ * with the intended use for Windows (i.e. not dialogs).
+ * 
+ * @author Wiggy boy
+ */
 public abstract class WindowController extends Controller {
 
 
@@ -15,9 +23,19 @@ public abstract class WindowController extends Controller {
 
 
 
-	public WindowController(View view, String fxmlPath, Model cfg) {
+	/**
+	 * Creates a generic controller, loads and deploys the FXML
+	 * from specified resource path.
+	 * 
+	 * @param view		The view the use when deploying the FXML.
+	 * @param fxmlPath	the relative resource path to the FXML file.
+	 * @param cfg		The model for the controller, may be null.
+	 * 
+	 * @throws IOException	if an error occurs during loading.
+	 */
+	public WindowController(View view, String fxmlPath, Model model) throws IOException {
 		super(view);
-		this.model = cfg;
+		this.model = model;
 
 		Parent root = loadFXML(fxmlPath);
 		Scene scene = new Scene(root);
@@ -28,34 +46,20 @@ public abstract class WindowController extends Controller {
 
 
 	/**
-	 * Loads an internal FXML file from within the compiled jar file.
-	 * If this fails, which should, and hopefully won't ever happen, the program
-	 * will exit.
+	 * Loads an internal FXML file from the resources.
 	 * 
-	 * @param fxmlPath
-	 * @return
+	 * @param fxmlPath	the relative resource path file for the FXML file.
+	 * 
+	 * @return returns	the parent node of the parsed FXML.
+	 * 
+	 * @throws IOException	if an error occurs during loading.
 	 */
-	private Parent loadFXML(String fxmlPath) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setController(this);
+	private Parent loadFXML(String fxmlPath) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setController(this);
 
-			InputStream fxmlStream = getClass().getResourceAsStream(fxmlPath);
-			return (Parent) loader.load(fxmlStream);
-		} catch (IOException e) {
-			// TODO make this more descriptive error message.
-			System.out.println("I am corrupt, FXML load failed!");
-			System.exit(0);
-		}
-
-		return null;
-	}
-
-
-
-	@Override
-	public View getView() {
-		return view;
+		InputStream fxmlStream = getClass().getResourceAsStream(fxmlPath);
+		return (Parent) loader.load(fxmlStream);
 	}
 
 
