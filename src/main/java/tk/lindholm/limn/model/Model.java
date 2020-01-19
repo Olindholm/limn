@@ -10,6 +10,11 @@ import javax.xml.bind.*;
  * A simple abstract class for constructing the most
  * basic of features of a Model in the MVC framework.
  * 
+ * If you want to be able to load and store using JAXB,
+ * the root model you'll need to add the annotation
+ * <code>@XmlRootElement(name = "InsertYourNameHere")</code>
+ * at the top of your class declaration.
+ * 
  * @author Wiggy boy
  */
 public abstract class Model {

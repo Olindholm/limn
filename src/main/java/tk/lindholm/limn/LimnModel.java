@@ -1,6 +1,8 @@
 package tk.lindholm.limn;
 
-import tk.lindholm.limn.model.Model;
+import tk.lindholm.limn.model.*;
+
+import javax.xml.bind.annotation.*;
 
 
 
@@ -10,14 +12,30 @@ import tk.lindholm.limn.model.Model;
  * 
  * @author Wiggy boy
  */
+@XmlRootElement(name = "limn")
 public class LimnModel extends Model {
+
+
+
+	private WindowBounds windowBounds;
 
 
 
 	@Override
 	protected void initDefaults() {
-		// TODO Auto-generated method stub
+		setWindowBounds(new WindowBounds());
 	}
+
+
+
+	@XmlElement
+	public WindowBounds getWindowBounds() {
+		return windowBounds;
+	}
+	public void setWindowBounds(WindowBounds windowBounds) {
+		this.windowBounds = windowBounds;
+	}
+
 
 
 
