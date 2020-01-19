@@ -9,3 +9,6 @@ target
 
 # Maven Shade Plugin for über jar
 dependency-reduced-pom.xml
+
+# Limn
+settings.xml

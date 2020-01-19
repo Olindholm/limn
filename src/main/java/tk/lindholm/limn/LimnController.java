@@ -20,6 +20,7 @@ public class LimnController extends WindowController {
 
 	public LimnController(View view, LimnModel model) throws IOException {
 		super(view, "LimnView.fxml", model);
+		view.initWindowBounds(model.getWindowBounds());
 	}
 
 

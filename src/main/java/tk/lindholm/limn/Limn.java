@@ -4,6 +4,8 @@ import tk.lindholm.limn.gui.*;
 
 import java.io.*;
 
+import javax.xml.bind.JAXBException;
+
 import javafx.application.Application;
 import javafx.stage.*;
 
@@ -34,9 +36,16 @@ public class Limn extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Controller controller = new LimnController(new View(), null);
+
+			File file = new File("settings.xml");
+			LimnModel cfg = file.exists() ? LimnModel.load(file, LimnModel.class) : new LimnModel();
+
+			Controller controller = new LimnController(new View(), cfg);
 			controller.getView().showAndWait();
-		} catch (IOException e) {
+
+			cfg.store(file);
+
+		} catch (IOException | JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
