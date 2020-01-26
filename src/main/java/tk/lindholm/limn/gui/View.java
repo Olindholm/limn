@@ -2,8 +2,6 @@ package tk.lindholm.limn.gui;
 
 import tk.lindholm.limn.model.WindowBounds;
 
-import javax.swing.Timer;
-
 import javafx.scene.*;
 import javafx.stage.*;
 import javafx.collections.*;
@@ -115,28 +113,23 @@ public class View extends Stage {
 		super.setWidth(bounds.getWidth());
 		super.setHeight(bounds.getHeight());
 
-		super.maximizedProperty().addListener(e -> { bounds.setMaximized(super.isMaximized()); });
+		super.maximizedProperty().addListener((obsv, oldValue, newValue) -> {
+			bounds.setMaximized(newValue);
+		});
 
-		/*
-		 * These timers ensure, because of unknown bad designs,
-		 * they fire off before the maximizedProperty does. This causes
-		 * the window to save x and y property 0 after closing the window
-		 * when it's maximized. This works around this problem.
-		 * 
-		 * It also ensures that the gesture when dragging your window to
-		 * top on windows 7, 8 and 10. It remembers the initial window
-		 * location, rather than the very last before maximizing.
-		 * Doing this gesture, is another way to maximize the window,
-		 * the user does not intend to move the window.
-		 */
-		Timer xTimer = new Timer(2000, e -> { if (!super.isMaximized()) bounds.setX(super.getX()); });
-		Timer yTimer = new Timer(2000, e -> { if (!super.isMaximized()) bounds.setY(super.getY()); });
+		super.xProperty().addListener((obsv, oldValue, newValue) -> {
+			if (!super.isMaximized()) bounds.setX(newValue.doubleValue());
+		});
+		super.yProperty().addListener((obsv, oldValue, newValue) -> {
+			if (!super.isMaximized()) bounds.setY(newValue.doubleValue());
+		});
 
-		super.xProperty().addListener(e -> xTimer.restart());
-		super.yProperty().addListener(e -> yTimer.restart());
-
-		super.widthProperty().addListener(e -> { if (!super.isMaximized()) bounds.setWidth(super.getWidth()); });
-		super.heightProperty().addListener(e -> { if (!super.isMaximized()) bounds.setHeight(super.getHeight()); });
+		super.widthProperty().addListener((obsv, oldValue, newValue) -> {
+			if (!super.isMaximized()) bounds.setWidth(newValue.doubleValue());
+		});
+		super.heightProperty().addListener((obsv, oldValue, newValue) -> {
+			if (!super.isMaximized()) bounds.setHeight(newValue.doubleValue());
+		});
 	}
 
 
