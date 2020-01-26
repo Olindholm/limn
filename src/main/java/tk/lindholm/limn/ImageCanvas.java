@@ -1,15 +1,24 @@
 package tk.lindholm.limn;
 
 import javafx.animation.*;
-import javafx.geometry.Orientation;
-import javafx.scene.canvas.*;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
-import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.image.*;
+import javafx.scene.input.ZoomEvent;
+import javafx.scene.canvas.*;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
+
+import static javafx.geometry.Orientation.*;
+import static javafx.scene.layout.Priority.*;
+import static javafx.scene.layout.BackgroundRepeat.*;
+
+
 
 public class ImageCanvas extends Pane {
 
+
+
+	Image transparencyTexture = new Image("file:transparency.png");
 
 
 	Canvas canvas;
@@ -29,23 +38,34 @@ public class ImageCanvas extends Pane {
 		gridPane.prefHeightProperty().bind(super.heightProperty());
 		super.getChildren().add(gridPane);
 
+		gridPane.setBackground(new Background(new BackgroundImage(transparencyTexture, REPEAT, REPEAT, null, null)));
+
 		xScroll = new ScrollBar();
-		xScroll.setOrientation(Orientation.HORIZONTAL);
+		xScroll.setOrientation(HORIZONTAL);
 		xScroll.setValue(0.5);
+		xScroll.setUnitIncrement(0.1);
+		xScroll.setBlockIncrement(0.1);
 		xScroll.setMax(1);
 		xScroll.valueProperty().addListener((observable, oldValue, newValue) -> { redraw = true; });
+		xScroll.setVisibleAmount(0.5);
 
 		gridPane.add(xScroll, 0, 1);
-		GridPane.setHgrow(xScroll, Priority.ALWAYS);
+		GridPane.setHgrow(xScroll, ALWAYS);
 
 		yScroll = new ScrollBar();
-		yScroll.setOrientation(Orientation.VERTICAL);
+		yScroll.setOrientation(VERTICAL);
 		yScroll.setValue(0.5);
+		yScroll.setUnitIncrement(0.1);
+		yScroll.setBlockIncrement(0.1);
 		yScroll.setMax(1);
 		yScroll.valueProperty().addListener((observable, oldValue, newValue) -> { redraw = true; });
 
 		gridPane.add(yScroll, 1, 0);
 		GridPane.setVgrow(yScroll, Priority.ALWAYS);
+
+		Pane pane = new Pane();
+		pane.setBackground(new Background(new BackgroundFill(new Color(233d/255, 233d/255, 233d/255, 1), null, null)));
+		gridPane.add(pane, 1, 1);
 
 		canvas = new Canvas();
 		canvas.widthProperty().bind(super.widthProperty().subtract(yScroll.widthProperty()));
@@ -76,16 +96,8 @@ public class ImageCanvas extends Pane {
 
 	public void setImageScale(double imageScale) {
 		this.imageScale = imageScale;
-
-		int imageWidth = (int) image.getWidth();
-		int imageHeight = (int) image.getHeight();
-
-		this.setWidth(imageScale * imageWidth);
-		this.setHeight(imageScale * imageHeight);
+		redraw = true;
 	}
-
-
-
 	public double getImageScale() {
 		return imageScale;
 	}
@@ -93,6 +105,9 @@ public class ImageCanvas extends Pane {
 
 
 	public void render() {
+		int x, y;
+		double canvasX, canvasY;
+
 		double imageWidth = image.getWidth();
 		double imageHeight = image.getHeight();
 
@@ -103,10 +118,6 @@ public class ImageCanvas extends Pane {
 		double yScroll = this.yScroll.getValue();
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-
-		// Clear the canvas
-		gc.setFill(Color.WHITE);
-		gc.fillRect(0, 0, canvasWidth, canvasHeight);
 
 		// Calculate the position of the image and
 		// what section of the image is visible (and thus should be rendered)
@@ -126,11 +137,25 @@ public class ImageCanvas extends Pane {
 		}
 
 
+
+		// Draw the transparency chess board
+		// Clear the canvas
+		gc.setFill(Color.WHITE);
+		gc.fillRect(0, 0, canvasWidth, canvasHeight);
+
+		canvasX = Math.round(gCanvasX);
+		canvasY = Math.round(gCanvasY);
+
+		int canvasXLimit = (int) Math.round(Math.min(canvasWidth, canvasX + imageScale * (imageWidth - gImageX)));
+		int canvasYLimit = (int) Math.round(Math.min(canvasHeight, canvasY + imageScale * (imageHeight - gImageY)));
+
+		gc.clearRect(canvasX, canvasY, canvasXLimit - canvasX, canvasYLimit - canvasY);
+
 		// Image
 		PixelReader reader = image.getPixelReader();
 
 		int imageX = gImageX;
-		double canvasX = gCanvasX;
+		canvasX = gCanvasX;
 		while (imageX < imageWidth && canvasX < canvasWidth) {
 			// X
 			double nextCanvasX = canvasX + imageScale;
@@ -138,19 +163,19 @@ public class ImageCanvas extends Pane {
 			canvasX = Math.max(0, canvasX);
 			nextCanvasX = Math.min(canvasWidth, nextCanvasX);
 
-			int x = (int) Math.round(canvasX);
+			x = (int) Math.round(canvasX);
 			int width = (int) Math.round(nextCanvasX - x);
 
 			// Y
 			int imageY = gImageY;
-			double canvasY = gCanvasY;
+			canvasY = gCanvasY;
 			while (imageY < imageHeight && canvasY < canvasHeight) {
 				double nextCanvasY = canvasY + imageScale;
 
 				canvasY = Math.max(0, canvasY);
 				nextCanvasY = Math.min(canvasHeight, nextCanvasY);
 
-				int y = (int) Math.round(canvasY);
+				y = (int) Math.round(canvasY);
 				int height = (int) Math.round(nextCanvasY - y);
 
 				Color c = reader.getColor(imageX, imageY);
