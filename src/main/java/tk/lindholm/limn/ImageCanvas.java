@@ -1,9 +1,10 @@
 package tk.lindholm.limn;
 
+import javafx.event.*;
 import javafx.animation.*;
 import javafx.scene.paint.*;
 import javafx.scene.image.*;
-import javafx.scene.input.ZoomEvent;
+import javafx.scene.input.*;
 import javafx.scene.canvas.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
@@ -14,7 +15,7 @@ import static javafx.scene.layout.BackgroundRepeat.*;
 
 
 
-public class ImageCanvas extends Pane {
+public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 
 
 
@@ -68,6 +69,7 @@ public class ImageCanvas extends Pane {
 		gridPane.add(pane, 1, 1);
 
 		canvas = new Canvas();
+		canvas.setOnScroll(this);
 		canvas.widthProperty().bind(super.widthProperty().subtract(yScroll.widthProperty()));
 		canvas.heightProperty().bind(super.heightProperty().subtract(xScroll.heightProperty()));
 		canvas.widthProperty().addListener((observable, oldValue, newValue) -> { redraw = true; });
@@ -190,6 +192,56 @@ public class ImageCanvas extends Pane {
 
 			imageX++;
 			canvasX = nextCanvasX;
+		}
+
+	}
+
+
+
+	@Override
+	public void handle(ScrollEvent event) {
+
+		double deltaY = event.getDeltaY();
+		double deltaX = event.getDeltaX();
+
+		if (event.isControlDown()) {
+
+			double x = (int) event.getX();
+			double y = (int) event.getY();
+
+			double oldXScroll = xScroll.getValue();
+			double oldYScroll = yScroll.getValue();
+
+			double imageWidth = image.getWidth();
+			double imageHeight = image.getHeight();
+
+			double canvasWidth = canvas.getWidth();
+			double canvasHeight = canvas.getHeight();
+
+			double oldImageScale = getImageScale();
+			double newImageScale = (deltaY > 0) ? Math.min(64, 2*oldImageScale) : Math.max(0.25, imageScale/2);
+
+			double xCenterOffset = x - .5*canvasWidth;
+			double yCenterOffset = y - .5*canvasHeight;
+
+			double newXScroll = oldXScroll + (xCenterOffset / oldImageScale - xCenterOffset / newImageScale) / imageWidth;
+			double newYScroll = oldYScroll + (yCenterOffset / oldImageScale - yCenterOffset / newImageScale) / imageHeight;
+
+			// Zoom
+			xScroll.setValue(Math.max(0, Math.min(1, newXScroll)));
+			yScroll.setValue(Math.max(0, Math.min(1, newYScroll)));
+			setImageScale(newImageScale);
+
+		}
+		else {
+
+			// Pan
+			if (deltaX < 0) xScroll.increment();
+			else if (deltaX > 0) xScroll.decrement();
+
+			if (deltaY < 0) yScroll.increment();
+			else if (deltaY > 0) yScroll.decrement();
+
 		}
 
 	}
