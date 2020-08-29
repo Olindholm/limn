@@ -26,14 +26,13 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 	ScrollBar xScroll, yScroll;
 
 	Image image;
-	double imageScale = 1;
+	double imageScale;
 
 	boolean redraw = false;
 
 
 
 	public ImageCanvas() {
-
 		GridPane gridPane = new GridPane();
 		gridPane.prefWidthProperty().bind(super.widthProperty());
 		gridPane.prefHeightProperty().bind(super.heightProperty());
@@ -44,8 +43,6 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 		xScroll = new ScrollBar();
 		xScroll.setOrientation(HORIZONTAL);
 		xScroll.setValue(0.5);
-		xScroll.setUnitIncrement(0.1);
-		xScroll.setBlockIncrement(0.1);
 		xScroll.setMax(1);
 		xScroll.valueProperty().addListener((observable, oldValue, newValue) -> { redraw = true; });
 		xScroll.setVisibleAmount(0.5);
@@ -56,8 +53,6 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 		yScroll = new ScrollBar();
 		yScroll.setOrientation(VERTICAL);
 		yScroll.setValue(0.5);
-		yScroll.setUnitIncrement(0.1);
-		yScroll.setBlockIncrement(0.1);
 		yScroll.setMax(1);
 		yScroll.valueProperty().addListener((observable, oldValue, newValue) -> { redraw = true; });
 
@@ -86,6 +81,8 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 				}
 			}
 		}.start();
+
+		setImageScale(1);
 	}
 
 
@@ -97,6 +94,16 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 
 
 	public void setImageScale(double imageScale) {
+		// Scroll speed/sensitivity.
+		// TODO Make it user adjustable
+		double scrollSpeed = 0.1d / imageScale;
+
+		xScroll.setUnitIncrement(scrollSpeed);
+		xScroll.setBlockIncrement(scrollSpeed);
+
+		yScroll.setUnitIncrement(scrollSpeed);
+		yScroll.setBlockIncrement(scrollSpeed);
+
 		this.imageScale = imageScale;
 		redraw = true;
 	}
