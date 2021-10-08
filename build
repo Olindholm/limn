@@ -1,0 +1,16 @@
+# /bin/bash
+
+# Make sure we're in workdir
+cd $(dirname "$BASH_SOURCE")
+
+# This will ensure if any of sub-shells fail,
+# this shell will fail too (thus not continue).
+set -e
+
+# Build
+echo "Building..."
+mvn clean compile assembly:single
+
+# Output
+JARFILE=$(ls ./target/*.jar)
+echo "The built executable can be found at $JARFILE"
