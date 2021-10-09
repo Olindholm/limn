@@ -12,14 +12,14 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
             <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
+            <MenuItem mnemonicParsing="false" onAction="#handleOpen" text="Open…" />
             <Menu mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
@@ -53,7 +53,7 @@
         </Menu>
       </menus>
     </MenuBar>
-      <HBox fx:id="centerPane" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      <VBox fx:id="centerPane" VBox.vgrow="ALWAYS" />
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
         <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
@@ -61,7 +61,7 @@
             <Font size="11.0" fx:id="x3" />
           </font>
           <textFill>
-            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
+            <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
           </textFill>
         </Label>
         <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />

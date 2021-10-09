@@ -2,13 +2,13 @@ package tk.lindholm.limn;
 
 import tk.lindholm.limn.gui.*;
 
-import java.io.IOException;
+import java.io.*;
 
 import javafx.fxml.*;
 import javafx.event.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
 
 
@@ -24,7 +24,7 @@ public class LimnController extends WindowController {
 
 	ImageCanvas imageCanvas;
 
-	@FXML HBox centerPane;
+	@FXML VBox centerPane;
 
 
 
@@ -32,15 +32,26 @@ public class LimnController extends WindowController {
 		super(view, "LimnView.fxml", model);
 		view.initWindowBounds(model.getWindowBounds());
 
-
-		Image dukeImage = new Image("file:duke.png");
-
-		ImageCanvas imageCanvas = new ImageCanvas();
-		imageCanvas.setImage(dukeImage);
+		imageCanvas = new ImageCanvas();
 
 		centerPane.getChildren().add(imageCanvas);
-		HBox.setHgrow(imageCanvas, Priority.ALWAYS);
+		VBox.setVgrow(imageCanvas, Priority.ALWAYS);
 
+	}
+	
+	@FXML
+	public void handleOpen(Event event) throws FileNotFoundException {
+		// Let user pick a file
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		File file = fileChooser.showOpenDialog(view);
+		
+		// If no file was picked, simply cancel
+		if (file == null) return;
+		
+		// Load file
+		Image image = new Image(new FileInputStream(file));
+		imageCanvas.setImage(image);
 	}
 
 	@Override

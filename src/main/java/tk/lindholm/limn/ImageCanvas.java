@@ -33,6 +33,8 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 
 
 	public ImageCanvas() {
+		setImage(null);
+		
 		GridPane gridPane = new GridPane();
 		gridPane.prefWidthProperty().bind(super.widthProperty());
 		gridPane.prefHeightProperty().bind(super.heightProperty());
@@ -89,6 +91,8 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 
 	public void setImage(Image image) {
 		this.image = image;
+		redraw = true;
+		setDisable(image == null);
 	}
 
 
@@ -114,19 +118,27 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 
 
 	public void render() {
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		
+		double canvasWidth = canvas.getWidth();
+		double canvasHeight = canvas.getHeight();
+		
+		// Clear the canvas
+		gc.setFill(Color.WHITE);
+		gc.fillRect(0, 0, canvasWidth, canvasHeight);
+		
+		// If image is null, do no more
+		if (image == null) return;
+		
+		// Render Image
 		int x, y;
 		double canvasX, canvasY;
 
 		double imageWidth = image.getWidth();
 		double imageHeight = image.getHeight();
 
-		double canvasWidth = canvas.getWidth();
-		double canvasHeight = canvas.getHeight();
-
 		double xScroll = this.xScroll.getValue();
 		double yScroll = this.yScroll.getValue();
-
-		GraphicsContext gc = canvas.getGraphicsContext2D();
 
 		// Calculate the position of the image and
 		// what section of the image is visible (and thus should be rendered)
@@ -144,13 +156,6 @@ public class ImageCanvas extends Pane implements EventHandler<ScrollEvent> {
 			gImageY = (int) ((yScroll * imageHeight * imageScale - canvasHeight/2) / imageScale);
 			gCanvasY += imageScale * gImageY;
 		}
-
-
-
-		// Draw the transparency chess board
-		// Clear the canvas
-		gc.setFill(Color.WHITE);
-		gc.fillRect(0, 0, canvasWidth, canvasHeight);
 
 		canvasX = Math.round(gCanvasX);
 		canvasY = Math.round(gCanvasY);
