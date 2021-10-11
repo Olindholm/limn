@@ -1,6 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>tk.lindholm</groupId>
@@ -14,6 +16,7 @@
 
 		<javafx.version>13</javafx.version>
 		<jaxb.version>2.3.1</jaxb.version>
+		<junit.version>4.13.2</junit.version>
 	</properties>
 
 	<dependencies>
@@ -40,6 +43,14 @@
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
 			<version>${jaxb.version}</version>
+		</dependency>
+
+		<!-- JUnit -->
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>${junit.version}</version>
+		    <scope>test</scope>
 		</dependency>
 
 	</dependencies>
