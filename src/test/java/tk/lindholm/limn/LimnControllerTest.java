@@ -20,4 +20,10 @@ public class LimnControllerTest {
 		assertThrows(FileNotFoundException.class, () -> LimnController.openImage(file));
 	}
 
+
+	@Test
+	public void openImage_fail() {
+		//fail("Do failing test");
+	}
+
 }
