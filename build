@@ -7,21 +7,12 @@ cd $(dirname "$BASH_SOURCE")
 # this shell will fail too (thus not continue).
 set -e
 
-# Determine extra args/flags
-BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-EXTRA_ARGS=""
-
-if [[ "$BRANCH" == "master" ]]; then
-	if  [[ ! -z "$BUILD_NUMBER" ]]; then
-		EXTRA_ARGS="$EXTRA_ARGS -Drevision=.$BUILD_NUMBER"
-	fi
-fi
-
-echo $EXTRA_ARGS
+# Import library
+source ./shlibs/args.sh
 
 # Build
 echo "Building..."
-mvn clean compile assembly:single $EXTRA_ARGS
+mvn clean compile assembly:single $(get_extra_args)
 
 # Output
 JARFILE=$(ls ./target/*.jar)
