@@ -7,6 +7,18 @@ cd $(dirname "$BASH_SOURCE")
 # this shell will fail too (thus not continue).
 set -e
 
+# Parse input args/flags
+CLEAN="clean"
+if [[ $# -gt 0 ]]; then
+    for ARG in "$@"; do
+        if [ $ARG == "--skip-clean" ]; then
+            CLEAN=""
+            echo "fuck cleaning"
+        fi
+    done
+fi
+
 # Test
 echo "Testing..."
-mvn clean test
+echo mvn $CLEAN test
+mvn $CLEAN test
