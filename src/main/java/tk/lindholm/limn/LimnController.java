@@ -45,13 +45,17 @@ public class LimnController extends WindowController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		File file = fileChooser.showOpenDialog(view);
-		
+
 		// If no file was picked, simply cancel
 		if (file == null) return;
 		
+		imageCanvas.setImage(openImage(file));
+	}
+	
+	public static Image openImage(File file) throws FileNotFoundException {
 		// Load file
 		Image image = new Image(new FileInputStream(file));
-		imageCanvas.setImage(image);
+		return image;
 	}
 
 	@Override
