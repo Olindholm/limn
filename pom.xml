@@ -67,7 +67,7 @@
 							<mainClass>tk.lindholm.limn.Main</mainClass>
 						</manifest>
 					</archive>
-					<finalName>${artifactId}-${version}</finalName>
+					<finalName>${project.artifactId}-${project.version}</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
