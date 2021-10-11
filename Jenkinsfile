@@ -10,8 +10,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building...'
-        sh '''bash ./build
-'''
+        sh 'bash ./build'
       }
     }
 
@@ -23,6 +22,7 @@ pipeline {
     }
 
     stage('Deploy') {
+      when { branch 'master' }
       steps {
         echo 'Deploying...'
       }
