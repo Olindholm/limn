@@ -13,12 +13,10 @@ if [[ $# -gt 0 ]]; then
     for ARG in "$@"; do
         if [ $ARG == "--skip-clean" ]; then
             CLEAN=""
-            echo "fuck cleaning"
         fi
     done
 fi
 
 # Test
 echo "Testing..."
-echo mvn $CLEAN test
 mvn $CLEAN test
